@@ -2,7 +2,7 @@ import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert';
 import request from 'supertest';
 import app from '../../src/index.js';
-import { clearTransactions } from '../../src/models/transaction.js';
+import { clearTransactions, createTransaction } from '../../src/models/transaction.js';
 
 describe('Transactions API Integration Tests', () => {
   beforeEach(() => {
@@ -333,12 +333,21 @@ describe('Transactions API Integration Tests', () => {
       assert.strictEqual(response.body.error, 'Invalid format. Supported formats: csv');
     });
 
-    it('should return 400 for missing format', async () => {
+    it('should default to csv format when format is not specified', async () => {
+      createTransaction({
+        toAccount: 'ACC-12345',
+        amount: 100,
+        currency: 'USD',
+        type: 'deposit'
+      });
+
       const response = await request(app)
         .get('/transactions/export')
-        .expect(400);
+        .expect('Content-Type', /text\/csv/)
+        .expect(200);
 
-      assert.strictEqual(response.body.error, 'Invalid format. Supported formats: csv');
+      assert.ok(response.text.includes('id,'));
+      assert.ok(response.text.includes('ACC-12345'));
     });
 
     it('should return empty response for no transactions', async () => {

@@ -49,9 +49,9 @@ router.get('/', (req, res) => {
  * Query params: format (csv), accountId, type, from, to
  */
 router.get('/export', (req, res) => {
-  const { format, accountId, type, from, to } = req.query;
+  const { format = 'csv', accountId, type, from, to } = req.query;
 
-  if (format?.toLowerCase() !== 'csv') {
+  if (format.toLowerCase() !== 'csv') {
     return res.status(400).json(formatError('Invalid format. Supported formats: csv'));
   }
 
