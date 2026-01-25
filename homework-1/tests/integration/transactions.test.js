@@ -360,5 +360,121 @@ describe('Transactions API Integration Tests', () => {
 
       assert.strictEqual(response.text, '');
     });
+
+    it('should generate valid CSV with correct structure and data', async () => {
+      clearTransactions();
+
+      // Create a transfer transaction with all fields
+      const createResponse = await request(app).post('/transactions').send({
+        fromAccount: 'ACC-SEND1',
+        toAccount: 'ACC-RECV1',
+        amount: 250.75,
+        currency: 'EUR',
+        type: 'transfer'
+      });
+      const createdTransaction = createResponse.body.data;
+
+      const response = await request(app)
+        .get('/transactions/export')
+        .query({ format: 'csv' })
+        .expect(200);
+
+      const lines = response.text.split('\n');
+
+      // Verify header row has all expected columns
+      const expectedHeaders = ['id', 'fromAccount', 'toAccount', 'amount', 'currency', 'type', 'timestamp', 'status'];
+      const actualHeaders = lines[0].split(',');
+      assert.deepStrictEqual(actualHeaders, expectedHeaders);
+
+      // Verify data row
+      const dataRow = lines[1].split(',');
+      assert.strictEqual(dataRow[0], createdTransaction.id);
+      assert.strictEqual(dataRow[1], 'ACC-SEND1');
+      assert.strictEqual(dataRow[2], 'ACC-RECV1');
+      assert.strictEqual(dataRow[3], '250.75');
+      assert.strictEqual(dataRow[4], 'EUR');
+      assert.strictEqual(dataRow[5], 'transfer');
+      assert.ok(dataRow[6].match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)); // ISO timestamp
+      assert.strictEqual(dataRow[7], 'completed');
+
+      // Verify correct number of lines (header + 1 data row)
+      assert.strictEqual(lines.length, 2);
+    });
+
+    it('should handle multiple transactions with various types in CSV', async () => {
+      clearTransactions();
+
+      // Create deposit
+      await request(app).post('/transactions').send({
+        toAccount: 'ACC-TEST1',
+        amount: 500,
+        currency: 'USD',
+        type: 'deposit'
+      });
+
+      // Create withdrawal
+      await request(app).post('/transactions').send({
+        fromAccount: 'ACC-TEST1',
+        amount: 100,
+        currency: 'USD',
+        type: 'withdrawal'
+      });
+
+      // Create transfer
+      await request(app).post('/transactions').send({
+        fromAccount: 'ACC-TEST1',
+        toAccount: 'ACC-TEST2',
+        amount: 50.50,
+        currency: 'GBP',
+        type: 'transfer'
+      });
+
+      const response = await request(app)
+        .get('/transactions/export')
+        .expect(200);
+
+      const lines = response.text.split('\n');
+
+      // Header + 3 data rows
+      assert.strictEqual(lines.length, 4);
+
+      // Verify each transaction type is present
+      assert.ok(response.text.includes('deposit'));
+      assert.ok(response.text.includes('withdrawal'));
+      assert.ok(response.text.includes('transfer'));
+
+      // Verify amounts are correctly formatted
+      assert.ok(response.text.includes('500'));
+      assert.ok(response.text.includes('100'));
+      assert.ok(response.text.includes('50.5'));
+
+      // Verify currencies
+      assert.ok(response.text.includes('USD'));
+      assert.ok(response.text.includes('GBP'));
+    });
+
+    it('should handle null/empty fields correctly in CSV', async () => {
+      clearTransactions();
+
+      // Deposit has no fromAccount
+      await request(app).post('/transactions').send({
+        toAccount: 'ACC-DEPO1',
+        amount: 100,
+        currency: 'USD',
+        type: 'deposit'
+      });
+
+      const response = await request(app)
+        .get('/transactions/export')
+        .expect(200);
+
+      const lines = response.text.split('\n');
+      const dataRow = lines[1].split(',');
+
+      // fromAccount should be empty for deposit
+      assert.strictEqual(dataRow[1], '');
+      // toAccount should have value
+      assert.strictEqual(dataRow[2], 'ACC-DEPO1');
+    });
   });
 });
