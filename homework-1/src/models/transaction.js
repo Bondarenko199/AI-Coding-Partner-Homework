@@ -1,7 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 // In-memory storage for transactions
 const transactions = [];
+
+// Get current directory for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Valid ISO 4217 currency codes (subset of commonly used ones)
 export const VALID_CURRENCIES = Object.freeze(['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'CNY', 'INR', 'PLN']);
@@ -125,3 +132,27 @@ export const clearTransactions = () => {
  * Get all transactions (raw, for export)
  */
 export const getAllTransactionsRaw = () => transactions;
+
+/**
+ * Seed sample data from demo/sample-data.json
+ */
+export const seedSampleData = () => {
+  try {
+    const sampleDataPath = join(__dirname, '../../demo/sample-data.json');
+    const data = JSON.parse(readFileSync(sampleDataPath, 'utf-8'));
+
+    if (data.sampleTransactions?.length) {
+      data.sampleTransactions.forEach(({ toAccount, fromAccount, amount, currency, type }) => {
+        createTransaction({ toAccount, fromAccount, amount, currency, type });
+      });
+      return data.sampleTransactions.length;
+    }
+    return 0;
+  } catch {
+    // Sample data file not found or invalid - continue without seeding
+    return 0;
+  }
+};
+
+// Seed sample data on module load
+seedSampleData();
