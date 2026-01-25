@@ -1,10 +1,12 @@
-# Banking Transactions API
+# 🏦 Homework 1: Banking Transactions API
 
+> **Student Name**: [H. Bondarenko]
+> **Date Submitted**: [Jan 25 2025]
 > **AI Tools Used**: Claude Code (Claude Opus 4.5), GitHub Copilot (Copilot)
 
 ---
 
-## Project Overview
+## 📋 Project Overview
 
 A minimal REST API for banking transactions built with Node.js and Express.js. This project demonstrates AI-assisted development practices, showcasing how AI coding tools can help create clean, well-structured code with proper validation and error handling.
 
