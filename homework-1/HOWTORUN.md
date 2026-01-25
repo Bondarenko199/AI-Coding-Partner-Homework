@@ -1,162 +1,56 @@
-# How to Run the Banking Transactions API
+# How to Run
 
 ## Prerequisites
 
-- **Node.js** version 20.x or higher
-- **npm** (comes with Node.js)
+- Node.js 20.x+ (`node --version`)
+- npm (`npm --version`)
 
-To check your versions:
-```bash
-node --version
-npm --version
-```
-
----
-
-## Installation
-
-### Option 1: Using the Demo Script
+## Installation & Start
 
 ```bash
 cd homework-1
-./demo/run.sh
-```
-
-This script will:
-1. Check for Node.js installation
-2. Install dependencies if needed
-3. Start the server
-
-### Option 2: Manual Installation
-
-```bash
-# Navigate to the homework-1 directory
-cd homework-1
-
-# Install dependencies
 npm install
-
-# Start the server
 npm start
+# Or use: ./demo/run.sh
 ```
 
----
+Server runs at `http://localhost:3000`
 
-## Verify It's Running
-
-Once started, you should see:
-```
-Banking Transactions API running on http://localhost:3000
-Available endpoints:
-  POST   /transactions          - Create a transaction
-  GET    /transactions          - List all transactions
-  GET    /transactions/:id      - Get transaction by ID
-  GET    /transactions/export   - Export as CSV
-  GET    /accounts/:id/balance  - Get account balance
-  GET    /health                - Health check
-```
-
-### Health Check
+## Verify
 
 ```bash
 curl http://localhost:3000/health
+# Returns: {"status":"ok","timestamp":"..."}
 ```
 
-Expected response:
-```json
-{"status":"ok","timestamp":"2024-01-15T10:30:00.000Z"}
-```
-
----
-
-## Testing the API
-
-### Using curl
+## Testing
 
 ```bash
-# Create a deposit transaction
-curl -X POST http://localhost:3000/transactions \
-  -H "Content-Type: application/json" \
-  -d '{
-    "toAccount": "ACC-12345",
-    "amount": 1000.00,
-    "currency": "USD",
-    "type": "deposit"
-  }'
+# Run test suite
+npm test
+# Or: ./demo/test.sh
 
-# Get all transactions
-curl http://localhost:3000/transactions
-
-# Get account balance
-curl http://localhost:3000/accounts/ACC-12345/balance
-```
-
-### Using VS Code REST Client
-
-Open `demo/sample-requests.http` in VS Code with the REST Client extension installed. Click "Send Request" on any request to execute it.
-
-### Using demo scripts
-
-There are helper scripts in the `demo/` folder to simplify testing:
-
-- `demo/test.sh` — Installs dependencies if needed and runs the full test suite (`npm test`). Make executable if necessary: `chmod +x demo/test.sh`.
-- `demo/requests.sh` — Executes a set of sample `curl` requests against `http://localhost:3000`. Make executable if necessary: `chmod +x demo/requests.sh`.
-
-Run them from the `homework-1` directory. Example:
-```bash
-./demo/test.sh
+# Sample API requests (server must be running)
 ./demo/requests.sh
+
+# VS Code REST Client
+# Open demo/sample-requests.http and click "Send Request"
 ```
-
-### Using Postman
-
-Import the requests from `demo/sample-requests.http` or create requests manually using the endpoints documented in [README.md](./README.md).
-
----
 
 ## Configuration
 
-### Port
-
-By default, the API runs on port 3000. To use a different port:
-
 ```bash
+# Custom port
 PORT=8080 npm start
+
+# Development mode (auto-restart)
+npm run dev
 ```
-
----
-
-## Stopping the Server
-
-Press `Ctrl+C` in the terminal where the server is running.
-
----
 
 ## Troubleshooting
 
-### "Port 3000 is already in use"
-
-Another process is using port 3000. Either:
-1. Stop the other process
-2. Use a different port: `PORT=3001 npm start`
-
-### "Module not found" errors
-
-Run `npm install` to ensure all dependencies are installed.
-
-### Permission denied on run.sh
-
-Make the script executable:
-```bash
-chmod +x demo/run.sh
-```
-
----
-
-## Development Mode
-
-For auto-restart on file changes (requires Node.js 20+):
-
-```bash
-npm run dev
-```
+| Issue | Solution |
+|-------|----------|
+| Port in use | `PORT=3001 npm start` |
+| Module not found | `npm install` |
+| Permission denied | `chmod +x demo/*.sh` |
