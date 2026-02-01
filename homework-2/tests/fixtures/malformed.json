@@ -1,0 +1,4 @@
+{
+  "this is": "not an array",
+  "should": "fail"
+}

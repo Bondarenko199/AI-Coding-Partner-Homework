@@ -1,0 +1,243 @@
+<tickets>
+  <ticket customer_id="CUST201" customer_email="william.zhang@example.com" customer_name="William Zhang" subject="Login page not responding" description="The login page becomes unresponsive after I enter my credentials. The submit button just spins and nothing happens. This started this morning." category="account_access" priority="urgent" status="new" assigned_to="agent1">
+    <tags>
+      <tag>login</tag>
+      <tag>unresponsive</tag>
+      <tag>urgent</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST202" customer_email="olivia.nguyen@example.com" customer_name="Olivia Nguyen" subject="Add multi-language support" description="Please add support for multiple languages. At minimum, Spanish, French, and German would be very helpful for our international users." category="feature_request" priority="medium" status="waiting_customer">
+    <tags>
+      <tag>i18n</tag>
+      <tag>languages</tag>
+      <tag>international</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST203" customer_email="ethan.kumar@example.com" customer_name="Ethan Kumar" subject="Credit card declined incorrectly" description="My credit card keeps getting declined even though I called the bank and they confirmed there are no issues on their end. Please check your payment processor." category="billing_question" priority="high" status="in_progress" assigned_to="agent2">
+    <tags>
+      <tag>payment</tag>
+      <tag>declined</tag>
+      <tag>card</tag>
+    </tags>
+    <metadata source="web_form" browser="Safari" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST204" customer_email="sophia.cohen@example.com" customer_name="Sophia Cohen" subject="App freezes when editing profiles" description="The mobile app freezes completely whenever I try to edit a profile. I have to force close and restart the app. Steps to reproduce: Open app, go to profile, tap edit, app freezes." category="bug_report" priority="high" status="new" assigned_to="agent3">
+    <tags>
+      <tag>freeze</tag>
+      <tag>mobile</tag>
+      <tag>profile</tag>
+    </tags>
+    <metadata source="phone" device_type="mobile"></metadata>
+  </ticket>
+  <ticket customer_id="CUST205" customer_email="jackson.murphy@example.com" customer_name="Jackson Murphy" subject="Dashboard widgets not updating" description="The widgets on my dashboard show old data from last week and don&apos;t update even when I refresh the page manually." category="technical_issue" priority="medium" status="new">
+    <tags>
+      <tag>dashboard</tag>
+      <tag>widgets</tag>
+      <tag>refresh</tag>
+    </tags>
+    <metadata source="web_form" browser="Firefox" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST206" customer_email="ava.rivera@example.com" customer_name="Ava Rivera" subject="Cannot change email address" description="I&apos;m trying to update my email address in account settings but the save button is grayed out. My new email is properly formatted." category="account_access" priority="medium" status="new">
+    <tags>
+      <tag>email</tag>
+      <tag>settings</tag>
+      <tag>update</tag>
+    </tags>
+    <metadata source="web_form" browser="Edge" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST207" customer_email="liam.cooper@example.com" customer_name="Liam Cooper" subject="Suggestion: Add keyboard shortcuts" description="Would be great to have keyboard shortcuts for common actions like save, delete, and search. This would improve productivity significantly." category="feature_request" priority="low" status="new">
+    <tags>
+      <tag>keyboard</tag>
+      <tag>shortcuts</tag>
+      <tag>productivity</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST208" customer_email="mia.peterson@example.com" customer_name="Mia Peterson" subject="Charged for cancelled subscription" description="I cancelled my subscription on the 5th of last month but was still charged on the 15th. Need a full refund for this charge." category="billing_question" priority="high" status="in_progress" assigned_to="agent2">
+    <tags>
+      <tag>refund</tag>
+      <tag>cancellation</tag>
+      <tag>charge</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST209" customer_email="noah.bell@example.com" customer_name="Noah Bell" subject="Form validation error message unclear" description="When I submit a form with invalid data, the error message just says &apos;Invalid input&apos; without explaining what field is wrong or why. Expected: Specific error messages for each field. Actual: Generic error message." category="bug_report" priority="medium" status="new">
+    <tags>
+      <tag>validation</tag>
+      <tag>error</tag>
+      <tag>ux</tag>
+    </tags>
+    <metadata source="web_form" browser="Safari" device_type="tablet"></metadata>
+  </ticket>
+  <ticket customer_id="CUST210" customer_email="isabella.howard@example.com" customer_name="Isabella Howard" subject="File upload size limit" description="What is the maximum file size for uploads? I&apos;m trying to upload a 25MB file and it&apos;s failing with no error message." category="technical_issue" priority="low" status="new">
+    <tags>
+      <tag>upload</tag>
+      <tag>file-size</tag>
+      <tag>limit</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST211" customer_email="mason.ward@example.com" customer_name="Mason Ward" subject="Enhance filtering options" description="The current filtering options are very basic. Would love to see advanced filters with AND/OR logic, date ranges, and saved filter presets." category="feature_request" priority="medium" status="waiting_customer">
+    <tags>
+      <tag>filters</tag>
+      <tag>search</tag>
+      <tag>enhancement</tag>
+    </tags>
+    <metadata source="api" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST212" customer_email="charlotte.torres@example.com" customer_name="Charlotte Torres" subject="Security: Weak password accepted" description="The system accepted my password &apos;123456&apos; which is extremely weak. This is a security vulnerability. You should enforce stronger password requirements." category="bug_report" priority="urgent" status="in_progress" assigned_to="agent1">
+    <tags>
+      <tag>security</tag>
+      <tag>password</tag>
+      <tag>vulnerability</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST213" customer_email="lucas.flores@example.com" customer_name="Lucas Flores" subject="API documentation incomplete" description="The API documentation is missing important information about authentication headers and request rate limits. Please update the docs with complete examples." category="other" priority="medium" status="waiting_customer">
+    <tags>
+      <tag>api</tag>
+      <tag>documentation</tag>
+      <tag>incomplete</tag>
+    </tags>
+    <metadata source="web_form" browser="Firefox" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST214" customer_email="amelia.washington@example.com" customer_name="Amelia Washington" subject="Cannot access premium features" description="I upgraded to premium yesterday but still can&apos;t access any premium features. My account still shows as free tier even though payment went through." category="account_access" priority="high" status="new" assigned_to="agent1">
+    <tags>
+      <tag>premium</tag>
+      <tag>upgrade</tag>
+      <tag>access</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST215" customer_email="benjamin.long@example.com" customer_name="Benjamin Long" subject="Database connection errors" description="Getting frequent &apos;database connection failed&apos; errors throughout the day. This is making the system unreliable. Errors occur randomly, not at specific times." category="technical_issue" priority="urgent" status="in_progress" assigned_to="agent5">
+    <tags>
+      <tag>database</tag>
+      <tag>connection</tag>
+      <tag>critical</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST216" customer_email="harper.hayes@example.com" customer_name="Harper Hayes" subject="Invoice download not working" description="When I click the download invoice button, I get a 404 error. Need to download invoices for tax purposes urgently." category="billing_question" priority="medium" status="new">
+    <tags>
+      <tag>invoice</tag>
+      <tag>download</tag>
+      <tag>404</tag>
+    </tags>
+    <metadata source="web_form" browser="Safari" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST217" customer_email="elijah.myers@example.com" customer_name="Elijah Myers" subject="Add support for custom fields" description="Would be extremely useful to have the ability to create custom fields for our specific use case. Different organizations have different data needs." category="feature_request" priority="high" status="waiting_customer">
+    <tags>
+      <tag>custom-fields</tag>
+      <tag>flexibility</tag>
+      <tag>enterprise</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST218" customer_email="evelyn.ross@example.com" customer_name="Evelyn Ross" subject="Sorting not working on tables" description="When I click the column headers to sort tables, nothing happens. Sorting should work on all columns but currently doesn&apos;t work at all." category="bug_report" priority="medium" status="new" assigned_to="agent3">
+    <tags>
+      <tag>sorting</tag>
+      <tag>tables</tag>
+      <tag>ui</tag>
+    </tags>
+    <metadata source="web_form" browser="Edge" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST219" customer_email="alexander.coleman@example.com" customer_name="Alexander Coleman" subject="Memory leak in web application" description="The web application has a memory leak. After keeping the browser tab open for a few hours, it consumes over 2GB of RAM and becomes very slow." category="technical_issue" priority="high" status="in_progress" assigned_to="agent5">
+    <tags>
+      <tag>memory-leak</tag>
+      <tag>performance</tag>
+      <tag>browser</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST220" customer_email="abigail.jenkins@example.com" customer_name="Abigail Jenkins" subject="Upgrade plan comparison" description="Can you send me a detailed comparison of features between the Standard and Premium plans? Want to make sure upgrade is worth it for our team." category="billing_question" priority="low" status="new">
+    <tags>
+      <tag>pricing</tag>
+      <tag>comparison</tag>
+      <tag>upgrade</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST221" customer_email="james.perry@example.com" customer_name="James Perry" subject="Add export to Google Sheets" description="Please add direct export to Google Sheets. Currently I have to download CSV then upload to Sheets which is inefficient." category="feature_request" priority="medium" status="new">
+    <tags>
+      <tag>export</tag>
+      <tag>google-sheets</tag>
+      <tag>integration</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST222" customer_email="ella.powell@example.com" customer_name="Ella Powell" subject="Footer links broken" description="Several links in the footer (Privacy Policy, Terms of Service, About Us) are broken and return 404 errors. Minor issue but should be fixed." category="bug_report" priority="low" status="new">
+    <tags>
+      <tag>links</tag>
+      <tag>footer</tag>
+      <tag>404</tag>
+    </tags>
+    <metadata source="web_form" browser="Firefox" device_type="mobile"></metadata>
+  </ticket>
+  <ticket customer_id="CUST223" customer_email="henry.russell@example.com" customer_name="Henry Russell" subject="Timeout error on large imports" description="When I try to import files with more than 1000 records, I get a timeout error. Need to import 5000 records for data migration." category="technical_issue" priority="high" status="new" assigned_to="agent3">
+    <tags>
+      <tag>import</tag>
+      <tag>timeout</tag>
+      <tag>bulk</tag>
+    </tags>
+    <metadata source="web_form" browser="Safari" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST224" customer_email="scarlett.griffin@example.com" customer_name="Scarlett Griffin" subject="Auto-logout too frequent" description="The system logs me out automatically every 10 minutes which is very annoying when I&apos;m actively working. Can this timeout be increased?" category="other" priority="low" status="new">
+    <tags>
+      <tag>session</tag>
+      <tag>timeout</tag>
+      <tag>logout</tag>
+    </tags>
+    <metadata source="web_form" browser="Edge" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST225" customer_email="sebastian.diaz@example.com" customer_name="Sebastian Diaz" subject="Critical: Production API down" description="The production API is completely down. All our services are affected. This is a critical emergency affecting thousands of users. Need immediate attention!" category="technical_issue" priority="urgent" status="in_progress" assigned_to="agent1">
+    <tags>
+      <tag>api</tag>
+      <tag>down</tag>
+      <tag>critical</tag>
+      <tag>emergency</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST226" customer_email="victoria.butler@example.com" customer_name="Victoria Butler" subject="Add role-based access control" description="Need role-based access control (RBAC) to manage permissions for different team members. Some should only view, others can edit, etc." category="feature_request" priority="high" status="waiting_customer">
+    <tags>
+      <tag>rbac</tag>
+      <tag>permissions</tag>
+      <tag>security</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST227" customer_email="jack.simmons@example.com" customer_name="Jack Simmons" subject="Discount code validation issue" description="Applied discount code SUMMER20 at checkout but it says invalid even though the email says it&apos;s valid until end of month. Please verify and apply discount." category="billing_question" priority="medium" status="new" assigned_to="agent2">
+    <tags>
+      <tag>discount</tag>
+      <tag>code</tag>
+      <tag>validation</tag>
+    </tags>
+    <metadata source="web_form" browser="Chrome" device_type="tablet"></metadata>
+  </ticket>
+  <ticket customer_id="CUST228" customer_email="grace.foster@example.com" customer_name="Grace Foster" subject="Date picker shows wrong format" description="The date picker displays dates in MM/DD/YYYY format but I need DD/MM/YYYY for our region. Expected: Regional date format. Actual: US format only." category="bug_report" priority="low" status="new">
+    <tags>
+      <tag>date</tag>
+      <tag>format</tag>
+      <tag>i18n</tag>
+    </tags>
+    <metadata source="web_form" browser="Safari" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST229" customer_email="wyatt.reynolds@example.com" customer_name="Wyatt Reynolds" subject="Email notifications not being sent" description="I&apos;m not receiving any email notifications anymore even though they&apos;re enabled in settings. Checked spam folder and email is correct." category="technical_issue" priority="medium" status="new">
+    <tags>
+      <tag>email</tag>
+      <tag>notifications</tag>
+      <tag>settings</tag>
+    </tags>
+    <metadata source="email" device_type="desktop"></metadata>
+  </ticket>
+  <ticket customer_id="CUST230" customer_email="lily.patterson@example.com" customer_name="Lily Patterson" subject="Small UI suggestion" description="The submit button could be more prominent. Maybe use a brighter color or make it slightly larger. Just a small UX improvement suggestion." category="other" priority="low" status="new">
+    <tags>
+      <tag>ui</tag>
+      <tag>button</tag>
+      <tag>suggestion</tag>
+    </tags>
+    <metadata source="web_form" browser="Firefox" device_type="desktop"></metadata>
+  </ticket>
+</tickets>

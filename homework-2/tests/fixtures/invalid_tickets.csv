@@ -1,0 +1,4 @@
+customer_id,customer_email,customer_name,subject,description
+CUST901,invalid-email,John Doe,Test,Short
+CUST902,test@example.com,,Valid Subject,This description is long enough
+CUST903,another@test.com,Jane Smith,This subject is way too long and exceeds the maximum allowed length of 200 characters which should cause a validation error when we try to import this ticket into the system and should be rejected by the validation,Valid description here

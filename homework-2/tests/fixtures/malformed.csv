@@ -1,0 +1,2 @@
+customer_id,customer_email,customer_name,subject,description
+CUST001,test@example.com,John "Doe,Test,This has an unclosed quote
