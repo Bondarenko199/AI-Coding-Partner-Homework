@@ -1,0 +1,440 @@
+[
+  {
+    "customer_id": "CUST101",
+    "customer_email": "alex.chen@example.com",
+    "customer_name": "Alex Chen",
+    "subject": "Can't reset my password",
+    "description": "I've tried to reset my password multiple times but the reset link in the email doesn't work. When I click it, nothing happens.",
+    "category": "account_access",
+    "priority": "high",
+    "status": "new",
+    "tags": [
+      "password",
+      "reset"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST102",
+    "customer_email": "maria.santos@example.com",
+    "customer_name": "Maria Santos",
+    "subject": "Application crashes when uploading images",
+    "description": "Every time I try to upload an image larger than 5MB, the application crashes completely. This is very frustrating as I need to upload product photos.",
+    "category": "bug_report",
+    "priority": "urgent",
+    "status": "in_progress",
+    "assigned_to": "agent4",
+    "tags": [
+      "crash",
+      "upload",
+      "images"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Firefox",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST103",
+    "customer_email": "tom.richardson@example.com",
+    "customer_name": "Tom Richardson",
+    "subject": "Invoice shows incorrect amount",
+    "description": "My invoice for March shows $299 but I should only be charged $199 based on my plan. Please review and correct this billing error.",
+    "category": "billing_question",
+    "priority": "high",
+    "status": "new",
+    "tags": [
+      "invoice",
+      "billing",
+      "error"
+    ],
+    "metadata": {
+      "source": "email",
+      "device_type": "desktop"
+    },
+    "source": "email",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST104",
+    "customer_email": "lisa.wong@example.com",
+    "customer_name": "Lisa Wong",
+    "subject": "Request: Add calendar integration",
+    "description": "Would love to see integration with Google Calendar and Outlook Calendar. This would make scheduling much easier for our team.",
+    "category": "feature_request",
+    "priority": "medium",
+    "status": "waiting_customer",
+    "tags": [
+      "calendar",
+      "integration",
+      "enhancement"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Safari",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST105",
+    "customer_email": "robert.kim@example.com",
+    "customer_name": "Robert Kim",
+    "subject": "Error 500 when accessing reports",
+    "description": "Getting internal server error (500) whenever I try to access the reports section. This has been happening for the past 2 days.",
+    "category": "technical_issue",
+    "priority": "high",
+    "status": "in_progress",
+    "assigned_to": "agent5",
+    "tags": [
+      "error",
+      "500",
+      "reports"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Edge",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST106",
+    "customer_email": "anna.mueller@example.com",
+    "customer_name": "Anna Mueller",
+    "subject": "Two-factor authentication setup help",
+    "description": "I'm trying to enable two-factor authentication but can't find where to scan the QR code in my authenticator app. The instructions are unclear.",
+    "category": "account_access",
+    "priority": "medium",
+    "status": "new",
+    "tags": [
+      "2fa",
+      "setup",
+      "help"
+    ],
+    "metadata": {
+      "source": "phone",
+      "device_type": "mobile"
+    },
+    "source": "phone",
+    "device_type": "mobile"
+  },
+  {
+    "customer_id": "CUST107",
+    "customer_email": "james.oconnor@example.com",
+    "customer_name": "James O'Connor",
+    "subject": "Suggestion: Dark mode for mobile app",
+    "description": "The mobile app really needs a dark mode option. Using it at night is hard on the eyes with the bright white background.",
+    "category": "feature_request",
+    "priority": "low",
+    "status": "new",
+    "tags": [
+      "dark-mode",
+      "mobile",
+      "ui"
+    ],
+    "metadata": {
+      "source": "phone",
+      "device_type": "mobile"
+    },
+    "source": "phone",
+    "device_type": "mobile"
+  },
+  {
+    "customer_id": "CUST108",
+    "customer_email": "emily.taylor@example.com",
+    "customer_name": "Emily Taylor",
+    "subject": "Incorrect tax calculation",
+    "description": "The tax calculation on my invoice is wrong. It's calculating 8.5% tax but my state has 7.25% sales tax rate. Please fix and issue a corrected invoice.",
+    "category": "billing_question",
+    "priority": "medium",
+    "status": "new",
+    "assigned_to": "agent2",
+    "tags": [
+      "tax",
+      "calculation",
+      "invoice"
+    ],
+    "metadata": {
+      "source": "email",
+      "device_type": "desktop"
+    },
+    "source": "email",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST109",
+    "customer_email": "david.patel@example.com",
+    "customer_name": "David Patel",
+    "subject": "Data export feature not working",
+    "description": "When I click the export data button, nothing happens. I need to export my data for compliance purposes. This is quite urgent.",
+    "category": "technical_issue",
+    "priority": "high",
+    "status": "new",
+    "tags": [
+      "export",
+      "data",
+      "broken"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST110",
+    "customer_email": "sarah.johnson@example.com",
+    "customer_name": "Sarah Johnson",
+    "subject": "Bug: Duplicate entries appearing",
+    "description": "I'm seeing duplicate entries in my dashboard that I didn't create. When I try to delete one, both disappear. Steps to reproduce: 1. Create new entry 2. Refresh page 3. Duplicate appears.",
+    "category": "bug_report",
+    "priority": "medium",
+    "status": "in_progress",
+    "assigned_to": "agent3",
+    "tags": [
+      "duplicate",
+      "bug",
+      "dashboard"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Firefox",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST111",
+    "customer_email": "michael.brown@example.com",
+    "customer_name": "Michael Brown",
+    "subject": "Feature idea: Bulk operations",
+    "description": "It would be really helpful to have bulk operations like bulk delete, bulk edit, and bulk export for managing large numbers of items.",
+    "category": "feature_request",
+    "priority": "medium",
+    "status": "waiting_customer",
+    "tags": [
+      "bulk",
+      "operations",
+      "enhancement"
+    ],
+    "metadata": {
+      "source": "api",
+      "device_type": "desktop"
+    },
+    "source": "api",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST112",
+    "customer_email": "jennifer.lee@example.com",
+    "customer_name": "Jennifer Lee",
+    "subject": "Cannot access account - locked",
+    "description": "My account has been locked after I entered my password wrong a few times. I need to access it urgently for a client presentation. Please unlock asap!",
+    "category": "account_access",
+    "priority": "urgent",
+    "status": "new",
+    "assigned_to": "agent1",
+    "tags": [
+      "locked",
+      "urgent",
+      "access"
+    ],
+    "metadata": {
+      "source": "email",
+      "device_type": "desktop"
+    },
+    "source": "email",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST113",
+    "customer_email": "christopher.davis@example.com",
+    "customer_name": "Christopher Davis",
+    "subject": "Slow loading times",
+    "description": "The application has become extremely slow over the past week. Pages take 10-15 seconds to load. This is making it unusable for daily work.",
+    "category": "technical_issue",
+    "priority": "high",
+    "status": "in_progress",
+    "assigned_to": "agent5",
+    "tags": [
+      "performance",
+      "slow",
+      "loading"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Safari",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST114",
+    "customer_email": "amanda.white@example.com",
+    "customer_name": "Amanda White",
+    "subject": "Subscription cancellation confirmation",
+    "description": "I cancelled my subscription yesterday but haven't received a confirmation email. Can you confirm it's been processed and I won't be charged next month?",
+    "category": "billing_question",
+    "priority": "medium",
+    "status": "new",
+    "tags": [
+      "subscription",
+      "cancellation",
+      "confirmation"
+    ],
+    "metadata": {
+      "source": "email",
+      "device_type": "desktop"
+    },
+    "source": "email",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST115",
+    "customer_email": "daniel.martinez@example.com",
+    "customer_name": "Daniel Martinez",
+    "subject": "Icons not displaying correctly",
+    "description": "Many of the icons throughout the app are not displaying correctly. They appear as broken image icons or squares. This is a minor cosmetic issue but looks unprofessional.",
+    "category": "bug_report",
+    "priority": "low",
+    "status": "new",
+    "tags": [
+      "icons",
+      "ui",
+      "cosmetic"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome",
+      "device_type": "tablet"
+    },
+    "source": "web_form",
+    "device_type": "tablet"
+  },
+  {
+    "customer_id": "CUST116",
+    "customer_email": "jessica.anderson@example.com",
+    "customer_name": "Jessica Anderson",
+    "subject": "Add SSO support",
+    "description": "Our company uses Okta for single sign-on. It would be great if you could add SSO support so our employees don't need separate credentials.",
+    "category": "feature_request",
+    "priority": "high",
+    "status": "waiting_customer",
+    "tags": [
+      "sso",
+      "okta",
+      "enterprise"
+    ],
+    "metadata": {
+      "source": "email",
+      "device_type": "desktop"
+    },
+    "source": "email",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST117",
+    "customer_email": "matthew.wilson@example.com",
+    "customer_name": "Matthew Wilson",
+    "subject": "Search functionality broken",
+    "description": "The search feature is not working at all. No matter what I search for, it returns zero results even though I know the items exist.",
+    "category": "technical_issue",
+    "priority": "medium",
+    "status": "new",
+    "assigned_to": "agent3",
+    "tags": [
+      "search",
+      "broken",
+      "bug"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Firefox",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST118",
+    "customer_email": "ashley.thomas@example.com",
+    "customer_name": "Ashley Thomas",
+    "subject": "Payment method update needed",
+    "description": "I need to update my credit card on file but the billing page says I don't have permission to edit payment methods. How do I fix this?",
+    "category": "billing_question",
+    "priority": "medium",
+    "status": "new",
+    "tags": [
+      "payment",
+      "permissions",
+      "update"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Edge",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST119",
+    "customer_email": "ryan.garcia@example.com",
+    "customer_name": "Ryan Garcia",
+    "subject": "Missing data after update",
+    "description": "After the system update last night, some of my data is missing. I had about 500 records and now only 320 are showing. This is critical as it's customer data!",
+    "category": "bug_report",
+    "priority": "urgent",
+    "status": "in_progress",
+    "assigned_to": "agent1",
+    "tags": [
+      "data-loss",
+      "critical",
+      "update"
+    ],
+    "metadata": {
+      "source": "email",
+      "device_type": "desktop"
+    },
+    "source": "email",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST120",
+    "customer_email": "stephanie.robinson@example.com",
+    "customer_name": "Stephanie Robinson",
+    "subject": "Question about enterprise features",
+    "description": "What additional features are included in the Enterprise plan compared to Professional? The pricing page doesn't have detailed information.",
+    "category": "other",
+    "priority": "low",
+    "status": "new",
+    "tags": [
+      "enterprise",
+      "pricing",
+      "features"
+    ],
+    "metadata": {
+      "source": "web_form",
+      "browser": "Chrome",
+      "device_type": "desktop"
+    },
+    "source": "web_form",
+    "device_type": "desktop"
+  }
+]

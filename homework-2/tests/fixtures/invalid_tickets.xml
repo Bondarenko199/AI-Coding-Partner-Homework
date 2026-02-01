@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tickets>
+  <ticket>
+    <customer_id>CUST701</customer_id>
+    <customer_email>bad-email-format</customer_email>
+    <customer_name>Invalid Email</customer_name>
+    <subject>Test Subject</subject>
+    <description>Short</description>
+  </ticket>
+  <ticket>
+    <customer_email>missing@customer.id</customer_email>
+    <customer_name>Missing ID</customer_name>
+    <subject>Another Test</subject>
+    <description>This description is valid but customer_id is missing</description>
+  </ticket>
+</tickets>
