@@ -220,7 +220,7 @@ flowchart TD
     CatMatch -->|Yes| CatScore[Calculate Category Score]
     CatMatch -->|No| DefCat[Default: other]
 
-    CatScore --> CatConf{Confidence<br/>>= 0.3?}
+    CatScore --> CatConf{Confidence<br/>above 0.3?}
     CatConf -->|Yes| SetCat[Set Category]
     CatConf -->|No| DefCat
 

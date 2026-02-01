@@ -16,7 +16,8 @@ graph TB
         WEB[Web App]
     end
 
-    subgraph API["Express API (Port 3000)"]
+    subgraph API
+        EXPRESS[Express API<br/>Port 3000]
         ROUTES[Routes]
         VALID[Validation]
         ERROR[Error Handler]
@@ -39,9 +40,10 @@ graph TB
         INDEX[Indexes]
     end
 
-    CLI --> ROUTES
-    WEB --> ROUTES
+    CLI --> EXPRESS
+    WEB --> EXPRESS
 
+    EXPRESS --> ROUTES
     ROUTES --> VALID
     VALID --> IMPORT
     VALID --> CLASS
@@ -61,7 +63,7 @@ graph TB
 
     ROUTES --> ERROR
 
-    style API fill:#4CAF50,color:#fff
+    style EXPRESS fill:#4CAF50,color:#fff
     style STORE fill:#FF9800,color:#fff
     style CLASS fill:#9C27B0,color:#fff
 ```
