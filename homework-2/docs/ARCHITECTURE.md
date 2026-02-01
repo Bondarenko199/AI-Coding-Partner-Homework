@@ -1,42 +1,38 @@
 # Architecture Documentation
 
-This document provides a detailed overview of the Ticket Management System architecture, component interactions, and design decisions.
+Express + TypeScript ticket management system with multi-format import, auto-classification, and in-memory storage.
 
 ## Table of Contents
 
 1. [System Overview](#system-overview)
 2. [Architecture Diagram](#architecture-diagram)
-3. [Component Descriptions](#component-descriptions)
-4. [Data Flow](#data-flow)
-5. [Auto-Classification Flow](#auto-classification-flow)
-6. [Design Decisions](#design-decisions)
-7. [Trade-offs](#trade-offs)
+3. [Components](#components)
+4. [Data Flows](#data-flows)
+5. [Design Decisions](#design-decisions)
+6. [Performance & Security](#performance--security)
 
 ---
 
 ## System Overview
 
-The Ticket Management System is a Node.js/TypeScript application built on Express.js that provides:
+**Tech Stack:** Node.js 18+, Express 4, TypeScript 5, Joi validation, native test runner
 
-- RESTful API for ticket CRUD operations
-- Multi-format data import (CSV, JSON, XML)
-- Intelligent auto-classification using keyword analysis
-- High-performance in-memory storage with indexing
-- Comprehensive validation and error handling
+**Key Features:**
+- RESTful API (7 endpoints)
+- Multi-format import (CSV/JSON/XML)
+- Keyword-based auto-classification
+- In-memory storage with O(1) indexes
+- 96.86% test coverage, sub-millisecond operations
 
-### Key Characteristics
-
-- **Stateless API**: Each request is independent
-- **In-Memory Storage**: Fast operations with O(1) lookups
-- **Type-Safe**: Full TypeScript implementation
-- **Test-Driven**: 96.86% code coverage
-- **Performance-Optimized**: Sub-millisecond operations
+**Characteristics:**
+- Stateless API
+- Type-safe (strict TypeScript)
+- Performance-optimized (Maps + Sets for indexing)
+- Comprehensive validation (Joi schemas)
 
 ---
 
 ## Architecture Diagram
-
-### High-Level Architecture
 
 ```mermaid
 graph TB
@@ -103,152 +99,82 @@ graph TB
 
 ---
 
-## Component Descriptions
+## Components
 
 ### API Layer
 
-#### Express Server (`src/app.ts`)
+| Component | File | Responsibilities |
+|-----------|------|------------------|
+| **Express App** | `src/app.ts` | Middleware config, route mounting, health check |
+| **Routes** | `src/routes/ticket-routes.ts` | 7 RESTful endpoints (POST/GET/PUT/DELETE) |
+| **Validation** | `src/middleware/validation-middleware.ts` | Joi schema validation, 400 errors |
+| **Error Handler** | `src/middleware/error-handler.ts` | Global error catching, status code mapping |
 
-- Initializes Express application
-- Configures middleware (JSON parsing, error handling)
-- Mounts route handlers
-- Provides health check endpoint
+**7 API Endpoints:**
+1. `POST /tickets` + `?autoClassify=true` - Create
+2. `POST /tickets/import` - Bulk import (CSV/JSON/XML)
+3. `GET /tickets` - List/filter by category/priority/status/customer_id/assigned_to
+4. `GET /tickets/:id` - Get one
+5. `PUT /tickets/:id` - Update
+6. `DELETE /tickets/:id` - Delete
+7. `POST /tickets/:id/auto-classify` - Classify existing
 
-**Responsibilities:**
-- Request/response cycle management
-- Global middleware configuration
-- Route registration
+### Business Logic
 
-#### Route Handlers (`src/routes/ticket-routes.ts`)
-
-Defines 7 RESTful endpoints:
-
-1. `POST /tickets` - Create ticket
-2. `POST /tickets/import` - Bulk import
-3. `GET /tickets` - List with filters
-4. `GET /tickets/:id` - Get by ID
-5. `PUT /tickets/:id` - Update ticket
-6. `DELETE /tickets/:id` - Delete ticket
-7. `POST /tickets/:id/auto-classify` - Auto-classify
-
-**Responsibilities:**
-- Route definition
-- Request validation
-- Service orchestration
-- Response formatting
-
-#### Middleware (`src/middleware/`)
-
-**ValidationMiddleware:**
-- Validates request bodies against Joi schemas
-- Attaches validated data to request object
-- Returns 400 errors for invalid data
-
-**ErrorHandler:**
-- Catches all errors (thrown and async)
-- Formats error responses consistently
-- Maps error types to HTTP status codes
-- Provides development vs production error details
-
----
-
-### Business Logic Layer
-
-#### Ticket Store (`src/services/ticket-store.ts`)
-
-In-memory storage with optimized data structures:
-
+**Ticket Store** (`src/services/ticket-store.ts`)
 ```typescript
 class TicketStore {
-  private tickets: Map<string, Ticket>;
-  private categoryIndex: Map<TicketCategory, Set<string>>;
+  private tickets: Map<string, Ticket>;           // O(1) lookup
+  private categoryIndex: Map<TicketCategory, Set<string>>;  // O(1) filter
   private priorityIndex: Map<TicketPriority, Set<string>>;
   private statusIndex: Map<TicketStatus, Set<string>>;
 }
 ```
+- CRUD operations with automatic index updates
+- O(1) lookups and filtered queries
 
-**Key Features:**
-- O(1) ticket lookups by ID
-- O(1) index-based filtering
-- Automatic index maintenance
-- CRUD operations with validation
+**Classification Service** (`src/services/classification-service.ts`)
 
-**Design Rationale:**
-- Maps provide O(1) access
-- Sets in indexes prevent duplicates
-- Indexes enable fast filtering without scanning
+Keyword-based classifier:
+1. Combine subject + description, lowercase
+2. Scan for category keywords → confidence score
+3. Scan for priority keywords
+4. Generate reasoning + matched keywords
 
-#### Classification Service (`src/services/classification-service.ts`)
+| Category | Keywords |
+|----------|----------|
+| `account_access` | login, password, 2FA |
+| `technical_issue` | error, bug, crash |
+| `billing_question` | payment, invoice, refund |
+| `feature_request` | feature, enhancement, suggestion |
+| `bug_report` | bug, defect, reproduce |
+| `other` | Default fallback |
 
-Keyword-based classification engine:
+| Priority | Keywords |
+|----------|----------|
+| `urgent` | critical, production down, security |
+| `high` | important, blocking, ASAP |
+| `medium` | Default |
+| `low` | minor, cosmetic, suggestion |
 
-**Algorithm:**
-1. Combine subject and description
-2. Convert to lowercase
-3. Search for category keywords
-4. Search for priority keywords
-5. Calculate confidence score
-6. Generate reasoning
-7. Return matched keywords
+**Import Service** (`src/services/import-service.ts`)
+- Detects/routes to CSV/JSON/XML parsers
+- Validates, optionally classifies, stores tickets
+- Returns summary: total/successful/failed/errors
 
-**Category Detection:**
-- `account_access`: login, password, 2FA
-- `technical_issue`: error, bug, crash
-- `billing_question`: payment, invoice, refund
-- `feature_request`: feature, enhancement, suggestion
-- `bug_report`: bug, defect, reproduce
-- `other`: Default fallback
+### Parsers
 
-**Priority Detection:**
-- `urgent`: critical, production down, security
-- `high`: important, blocking, ASAP
-- `medium`: Default
-- `low`: minor, cosmetic, suggestion
-
-#### Import Service (`src/services/import-service.ts`)
-
-Orchestrates multi-format imports:
-
-**Flow:**
-1. Detect or use specified file type
-2. Route to appropriate parser
-3. Parse and validate each record
-4. Collect successes and errors
-5. Optionally auto-classify
-6. Store tickets
-7. Return import summary
+| Parser | Library | Features |
+|--------|---------|----------|
+| **CSV** | `csv-parse` | Column name normalization (snake_case/camelCase), tag parsing |
+| **JSON** | Native | Array validation, per-record errors |
+| **XML** | `fast-xml-parser` | Single/array handling, nested tags, field normalization |
 
 ---
 
-### Parser Components
+## Data Flows
 
-#### CSV Parser (`src/services/csv-parser.ts`)
-
-- Uses `csv-parse` library
-- Handles column name variations (snake_case, camelCase)
-- Parses tags from comma-separated strings
-- Converts date strings to Date objects
-
-#### JSON Parser (`src/services/json-parser.ts`)
-
-- Validates array structure
-- Parses each object individually
-- Collects per-record errors
-- Converts date strings
-
-#### XML Parser (`src/services/xml-parser.ts`)
-
-- Uses `fast-xml-parser`
-- Handles single ticket vs array
-- Parses nested tags structure
-- Converts numeric tags to strings
-- Normalizes field names
-
----
-
-## Data Flow
-
-### Ticket Creation Flow
+### Ticket Creation with Auto-Classification
 
 ```mermaid
 sequenceDiagram
@@ -283,9 +209,7 @@ sequenceDiagram
     Routes-->>Client: 201 Created + ticket JSON
 ```
 
----
-
-## Auto-Classification Flow
+### Auto-Classification Algorithm
 
 ```mermaid
 flowchart TD
@@ -333,255 +257,104 @@ flowchart TD
 
 ## Design Decisions
 
-### 1. In-Memory Storage
+### 1. In-Memory Storage (vs Database)
 
-**Decision:** Use Map-based in-memory storage instead of database.
-
-**Rationale:**
-- Requirement scope: Demo/homework project
-- Performance: Sub-millisecond operations
-- Simplicity: No database setup required
-- Testing: Easy to reset state between tests
-
-**Trade-off:** Data lost on restart (acceptable for demo)
+**Why:** Demo scope, sub-ms performance, no setup, easy testing
+**Trade-off:** No persistence (acceptable for demo), could add Redis for production
 
 ### 2. Indexed Filtering
 
-**Decision:** Maintain separate indexes for category, priority, and status.
+**Why:** O(1) queries vs O(n) scan, common filters (category/priority/status)
+**Implementation:** Separate `Map<Category, Set<ID>>` indexes, auto-updated on changes
+**Not indexed:** customer_id, assigned_to (too many unique values, linear scan)
 
-**Rationale:**
-- O(1) filtered queries vs O(n) scan
-- Common filter combinations
-- Small memory overhead
-- Significant performance gain
+### 3. Strict TypeScript
 
-**Implementation:**
-```typescript
-private categoryIndex: Map<TicketCategory, Set<string>>;
-```
-
-### 3. TypeScript Strict Mode
-
-**Decision:** Enable all strict TypeScript compiler options.
-
-**Rationale:**
-- Catch errors at compile time
-- Better IDE support
-- Self-documenting code
-- Easier refactoring
+**Why:** Compile-time errors, better IDE/refactoring, self-documenting
+**Trade-off:** More boilerplate, steeper curve, but pays off in maintenance
 
 ### 4. Joi Validation
 
-**Decision:** Use Joi for request validation instead of custom validation.
-
-**Rationale:**
-- Industry-standard library
-- Declarative schema definition
-- Rich validation rules
-- Good error messages
+**Why:** Industry standard, declarative schemas, rich rules, good error messages
+**Alternative:** Custom validation (more code, less features)
 
 ### 5. Node.js Native Test Runner
 
-**Decision:** Use built-in Node.js test runner instead of Jest/Mocha.
+**Why:** No external deps, native TS support (tsx), built-in coverage
+**Alternative:** Jest/Mocha (more features, but unnecessary here)
 
-**Rationale:**
-- No external dependencies
-- Native TypeScript support via tsx
-- Built-in coverage reporting
-- Simpler configuration
+### 6. Keyword-Based Classification (vs ML)
 
-### 6. Keyword-Based Classification
+**Why:** No training data, deterministic, explainable, fast, easy to customize
+**Trade-off:** Lower accuracy than ML, confidence scores indicate reliability
+**Limitation:** Sufficient for demo, production might need ML
 
-**Decision:** Use keyword matching instead of ML models.
+### 7. RESTful API
 
-**Rationale:**
-- No training data required
-- Deterministic and explainable
-- Fast execution
-- Easy to customize
-
-**Limitation:** Less accurate than ML, but sufficient for demo
-
-### 7. RESTful API Design
-
-**Decision:** Follow REST principles strictly.
-
-**Rationale:**
-- Industry standard
-- Easy to understand
-- Well-supported tooling
-- Cacheable responses
+**Why:** Industry standard, cacheable, well-understood, great tooling
+**Alternative:** GraphQL (overkill for simple CRUD)
 
 ---
 
-## Trade-offs
+## Performance & Security
 
-### 1. Memory vs Persistence
+### Performance
 
-**Choice:** In-memory storage
+**Indexing:**
+- Category (6 values), Priority (4 values), Status (5 values) - O(1) filters
+- customer_id, assigned_to - O(n) scan alone, O(1) when combined with indexed fields
 
-**Gained:**
-- Extreme performance
-- Simple implementation
-- No database dependencies
-
-**Lost:**
-- Data persistence
-- Multi-instance support
-- Backup/recovery
-
-**Mitigation:** Could add Redis for production use
-
-### 2. Accuracy vs Simplicity
-
-**Choice:** Keyword-based classification
-
-**Gained:**
-- No training required
-- Explainable results
-- Fast execution
-
-**Lost:**
-- Lower accuracy
-- Limited context understanding
-- Manual keyword maintenance
-
-**Mitigation:** Confidence scores indicate reliability
-
-### 3. Type Safety vs Development Speed
-
-**Choice:** Strict TypeScript
-
-**Gained:**
-- Compile-time error detection
-- Better refactoring support
-- Self-documenting code
-
-**Lost:**
-- More boilerplate
-- Steeper learning curve
-- Longer initial development
-
-**Mitigation:** Pays off in maintenance phase
-
-### 4. Coverage vs Test Complexity
-
-**Choice:** 96.86% coverage target
-
-**Gained:**
-- High confidence in code
-- Fewer bugs in production
-- Safe refactoring
-
-**Lost:**
-- More test code to maintain
-- Longer test execution time
-- Higher initial effort
-
-**Mitigation:** Tests serve as documentation
-
----
-
-## Performance Considerations
-
-### Indexing Strategy
-
-Indexes maintained for most-filtered fields:
-- Category (6 possible values)
-- Priority (4 possible values)
-- Status (5 possible values)
-
-Not indexed:
-- customer_id (too many unique values)
-- assigned_to (too many unique values)
-
-These perform linear scan when filtered alone, but use indexes when combined with category/priority/status.
-
-### Concurrent Operations
-
-- Store operations are synchronous
-- Express handles concurrency naturally
-- No locking required (single-threaded Node.js)
+**Concurrency:**
+- Synchronous store ops (single-threaded Node.js, no locking needed)
 - Tested with 100 concurrent requests
+- Express handles concurrency naturally
 
-### Scalability Limits
+**Benchmarks:**
+- Create 1000 tickets: ~0.66ms each
+- 100 filtered queries: ~0.45ms each
+- Import 500 CSV tickets: ~38ms total
 
-Current architecture supports:
+**Scalability Limits:**
 - ~100,000 tickets in memory
-- ~1,000 requests/second
-- Single instance only
+- ~1,000 req/sec single instance
+- For production: Add PostgreSQL, Redis, load balancer, pagination
 
-For production scale:
-- Add database (PostgreSQL)
-- Add caching layer (Redis)
-- Add load balancer
-- Implement pagination
+### Security
 
----
-
-## Security Considerations
-
-### Input Validation
-
-- All inputs validated with Joi
-- Email format verification
-- String length limits
-- Enum validation
-
-### Error Handling
-
+**Current:**
+- Joi validation (email format, length limits, enum checks)
 - No stack traces in production
 - Generic error messages
-- Detailed errors in development
 
-### Future Enhancements
-
-- Authentication/Authorization
-- Rate limiting
+**Production Needs:**
+- Authentication/Authorization (JWT, OAuth)
+- Rate limiting (express-rate-limit)
 - CORS configuration
-- Input sanitization for XSS
+- Input sanitization (XSS prevention)
 - SQL injection prevention (if using DB)
 
 ---
 
 ## Extensibility
 
-### Adding New Categories
-
-1. Update `TicketCategory` enum
-2. Add keywords to `CATEGORY_KEYWORDS`
-3. Update documentation
-4. Add tests
-
-### Adding New Parsers
-
-1. Implement parser interface
-2. Add to `ImportService` switch
-3. Add file type detection
-4. Add tests
-
-### Adding Database
-
-1. Create repository interface
-2. Implement database repository
-3. Replace TicketStore
-4. Maintain index logic
+**Add Category:** Update `TicketCategory` enum → add keywords to `CATEGORY_KEYWORDS` → tests
+**Add Parser:** Implement interface → add to `ImportService` switch → tests
+**Add Database:** Create repo interface → implement DB repo → replace TicketStore
 
 ---
 
-## Conclusion
+## Summary
 
-The architecture balances simplicity, performance, and maintainability for a homework/demo project. Key strengths:
-
-- ✅ Clear separation of concerns
-- ✅ Type-safe implementation
-- ✅ High test coverage
-- ✅ Excellent performance
+**Strengths:**
+- ✅ Clear layered architecture (API → Services → Storage)
+- ✅ Type-safe (TypeScript strict mode)
+- ✅ High coverage (96.86%)
+- ✅ Excellent performance (O(1) operations)
 - ✅ Extensible design
 
-For production use, consider:
-- Persistent storage
-- Horizontal scaling
-- Enhanced security
-- Monitoring/logging
-- API versioning
+**Production Considerations:**
+- Persistent storage (PostgreSQL/MongoDB)
+- Horizontal scaling (stateless design ready)
+- Enhanced security (auth, rate limiting)
+- Monitoring/logging (structured logs, metrics)
+- API versioning (/v1/tickets)

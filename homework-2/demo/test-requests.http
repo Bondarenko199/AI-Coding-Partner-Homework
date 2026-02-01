@@ -1,0 +1,325 @@
+### Ticket Management System - API Test Requests
+### Use with REST Client (VS Code extension) or similar tools
+### Base URL
+@baseUrl = http://localhost:3000
+
+### ============================================
+### Health Check
+### ============================================
+
+### Check server health
+GET {{baseUrl}}/health
+
+### ============================================
+### Create Tickets
+### ============================================
+
+### Create a simple ticket
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "customer_id": "C001",
+  "customer_email": "john.doe@example.com",
+  "customer_name": "John Doe",
+  "subject": "Cannot login to my account",
+  "description": "I forgot my password and cannot access my account.",
+  "metadata": {
+    "source": "web_form",
+    "device_type": "desktop"
+  }
+}
+
+### Create ticket with auto-classification
+POST {{baseUrl}}/tickets?autoClassify=true
+Content-Type: application/json
+
+{
+  "customer_id": "C002",
+  "customer_email": "jane.smith@example.com",
+  "customer_name": "Jane Smith",
+  "subject": "Application crashes on startup",
+  "description": "The app crashes immediately when I try to open it. Error code 500. This is critical and blocking production.",
+  "metadata": {
+    "source": "email",
+    "device_type": "mobile"
+  }
+}
+
+### Create urgent billing ticket
+POST {{baseUrl}}/tickets?autoClassify=true
+Content-Type: application/json
+
+{
+  "customer_id": "C003",
+  "customer_email": "billing@example.com",
+  "customer_name": "Billing Department",
+  "subject": "Duplicate charge on invoice",
+  "description": "Customer was charged twice for the same invoice. Need immediate refund processing.",
+  "metadata": {
+    "source": "phone",
+    "device_type": "desktop"
+  }
+}
+
+### Create feature request
+POST {{baseUrl}}/tickets?autoClassify=true
+Content-Type: application/json
+
+{
+  "customer_id": "C004",
+  "customer_email": "feature@example.com",
+  "customer_name": "Feature Requester",
+  "subject": "Add dark mode",
+  "description": "Would be nice to have dark mode feature for better nighttime viewing. This is a cosmetic suggestion.",
+  "metadata": {
+    "source": "web_form",
+    "device_type": "mobile"
+  }
+}
+
+### Create bug report
+POST {{baseUrl}}/tickets?autoClassify=true
+Content-Type: application/json
+
+{
+  "customer_id": "C005",
+  "customer_email": "qa@example.com",
+  "customer_name": "QA Tester",
+  "subject": "Search returns incorrect results",
+  "description": "Bug found in search functionality. Steps to reproduce: 1) Open search, 2) Type 'test', 3) Expected: relevant results, Actual: shows unrelated items.",
+  "metadata": {
+    "source": "api",
+    "device_type": "desktop"
+  }
+}
+
+### ============================================
+### Bulk Import
+### ============================================
+
+### Import from CSV
+POST {{baseUrl}}/tickets/import
+Content-Type: application/json
+
+{
+  "content": "customer_id,customer_email,customer_name,subject,description,source,device_type\nCSV001,alice@example.com,Alice Johnson,Password reset needed,Cannot reset my password using the forgot password link,email,desktop\nCSV002,bob@example.com,Bob Smith,Slow dashboard,Dashboard takes forever to load all the widgets,web_form,mobile\nCSV003,carol@example.com,Carol White,Missing invoice,Did not receive invoice for last month subscription,phone,desktop",
+  "fileType": "csv",
+  "autoClassify": true
+}
+
+### Import from JSON
+POST {{baseUrl}}/tickets/import
+Content-Type: application/json
+
+{
+  "content": "[{\"customer_id\":\"JSON001\",\"customer_email\":\"david@example.com\",\"customer_name\":\"David Lee\",\"subject\":\"2FA not working\",\"description\":\"Two-factor authentication code not arriving via SMS\",\"metadata\":{\"source\":\"chat\",\"device_type\":\"mobile\"}},{\"customer_id\":\"JSON002\",\"customer_email\":\"emma@example.com\",\"customer_name\":\"Emma Davis\",\"subject\":\"Export feature needed\",\"description\":\"Would like ability to export data to CSV format\",\"metadata\":{\"source\":\"web_form\",\"device_type\":\"desktop\"}}]",
+  "fileType": "json",
+  "autoClassify": true
+}
+
+### Import from XML
+POST {{baseUrl}}/tickets/import
+Content-Type: application/json
+
+{
+  "content": "<?xml version=\"1.0\"?><tickets><ticket><customer_id>XML001</customer_id><customer_email>frank@example.com</customer_email><customer_name>Frank Miller</customer_name><subject>Security alert</subject><description>Received suspicious login attempt notification from unknown location</description><metadata><source>email</source><device_type>desktop</device_type></metadata></ticket><ticket><customer_id>XML002</customer_id><customer_email>grace@example.com</customer_email><customer_name>Grace Wilson</customer_name><subject>Mobile app crash</subject><description>App crashes when uploading large files on mobile device</description><metadata><source>api</source><device_type>mobile</device_type></metadata></ticket></tickets>",
+  "fileType": "xml",
+  "autoClassify": true
+}
+
+### Import invalid CSV (should return errors)
+POST {{baseUrl}}/tickets/import
+Content-Type: application/json
+
+{
+  "content": "customer_id,customer_email,customer_name,subject,description\nINV001,invalid-email,Test,Too short,Short",
+  "fileType": "csv",
+  "autoClassify": false
+}
+
+### ============================================
+### Query and Filter Tickets
+### ============================================
+
+### List all tickets
+GET {{baseUrl}}/tickets
+
+### Filter by category - account_access
+GET {{baseUrl}}/tickets?category=account_access
+
+### Filter by category - technical_issue
+GET {{baseUrl}}/tickets?category=technical_issue
+
+### Filter by category - billing_question
+GET {{baseUrl}}/tickets?category=billing_question
+
+### Filter by priority - urgent
+GET {{baseUrl}}/tickets?priority=urgent
+
+### Filter by priority - high
+GET {{baseUrl}}/tickets?priority=high
+
+### Filter by priority - low
+GET {{baseUrl}}/tickets?priority=low
+
+### Filter by status - new
+GET {{baseUrl}}/tickets?status=new
+
+### Filter by customer_id
+GET {{baseUrl}}/tickets?customer_id=C001
+
+### Filter by multiple parameters
+GET {{baseUrl}}/tickets?category=technical_issue&priority=urgent
+
+### ============================================
+### Get Specific Ticket
+### ============================================
+
+### Get ticket by ID (replace with actual ID from creation response)
+# @ticketId = <paste-ticket-id-here>
+GET {{baseUrl}}/tickets/{{ticketId}}
+
+### ============================================
+### Update Tickets
+### ============================================
+
+### Update ticket status (replace with actual ID)
+PUT {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "status": "in_progress",
+  "assigned_to": "support-agent-001"
+}
+
+### Update ticket with manual classification override
+PUT {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "category": "technical_issue",
+  "priority": "urgent",
+  "status": "in_progress"
+}
+
+### Resolve ticket
+PUT {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "status": "resolved"
+}
+
+### Close ticket
+PUT {{baseUrl}}/tickets/{{ticketId}}
+Content-Type: application/json
+
+{
+  "status": "closed"
+}
+
+### ============================================
+### Auto-Classification
+### ============================================
+
+### Auto-classify existing ticket (replace with actual ID)
+POST {{baseUrl}}/tickets/{{ticketId}}/auto-classify
+
+### ============================================
+### Delete Tickets
+### ============================================
+
+### Delete ticket (replace with actual ID)
+DELETE {{baseUrl}}/tickets/{{ticketId}}
+
+### ============================================
+### Error Cases (for testing validation)
+### ============================================
+
+### Invalid email format
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "customer_id": "ERR001",
+  "customer_email": "not-an-email",
+  "customer_name": "Error Test",
+  "subject": "Test",
+  "description": "Testing validation",
+  "metadata": {
+    "source": "web_form",
+    "device_type": "desktop"
+  }
+}
+
+### Subject too short
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "customer_id": "ERR002",
+  "customer_email": "valid@example.com",
+  "customer_name": "Error Test",
+  "subject": "",
+  "description": "Valid description here",
+  "metadata": {
+    "source": "web_form",
+    "device_type": "desktop"
+  }
+}
+
+### Description too short
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "customer_id": "ERR003",
+  "customer_email": "valid@example.com",
+  "customer_name": "Error Test",
+  "subject": "Valid subject",
+  "description": "Short",
+  "metadata": {
+    "source": "web_form",
+    "device_type": "desktop"
+  }
+}
+
+### Invalid category
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "customer_id": "ERR004",
+  "customer_email": "valid@example.com",
+  "customer_name": "Error Test",
+  "subject": "Valid subject",
+  "description": "Valid description with enough characters",
+  "category": "invalid_category",
+  "metadata": {
+    "source": "web_form",
+    "device_type": "desktop"
+  }
+}
+
+### Missing required fields
+POST {{baseUrl}}/tickets
+Content-Type: application/json
+
+{
+  "customer_id": "ERR005"
+}
+
+### Get non-existent ticket
+GET {{baseUrl}}/tickets/00000000-0000-0000-0000-000000000000
+
+### Update non-existent ticket
+PUT {{baseUrl}}/tickets/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+
+{
+  "status": "resolved"
+}
+
+### Delete non-existent ticket
+DELETE {{baseUrl}}/tickets/00000000-0000-0000-0000-000000000000
