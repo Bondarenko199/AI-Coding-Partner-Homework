@@ -1,6 +1,10 @@
 # Homework 5: MCP Server Configuration
 
-Author: H. Bondarenko
+> **Student Name**: h.bondarenko
+> **Date Submitted**: 2026-03-15
+> **AI Tools Used**: OpenAI Codex (GPT-5 Codex), parallel Codex sub-agents for research/QA, VS Code MCP tooling
+
+---
 
 ## Overview
 
