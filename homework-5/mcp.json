@@ -1,0 +1,54 @@
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "github-pat",
+      "description": "GitHub Personal Access Token",
+      "password": true
+    }
+  ],
+  "servers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${input:github-pat}"
+      }
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ],
+      "sandboxEnabled": true,
+      "sandbox": {
+        "filesystem": {
+          "allowWrite": [
+            "${workspaceFolder}"
+          ]
+        }
+      }
+    },
+    "jira": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp"
+    },
+    "customMcp": {
+      "type": "stdio",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": [
+        "${workspaceFolder}/custom-mcp-server/server.py"
+      ],
+      "cwd": "${workspaceFolder}/custom-mcp-server",
+      "dev": {
+        "watch": [
+          "${workspaceFolder}/custom-mcp-server/*.py",
+          "${workspaceFolder}/custom-mcp-server/*.md"
+        ]
+      }
+    }
+  }
+}
