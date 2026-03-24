@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from agents.fraud_detector import FraudDetector
+from agents.notification_agent import NotificationAgent
 from agents.settlement_processor import SettlementProcessor
 from agents.transaction_validator import TransactionValidator
 
@@ -32,7 +33,7 @@ def _utcnow() -> str:
 
 
 def _ensure_dirs(base_dir: Path) -> None:
-    for sub in ("shared/input", "shared/processing", "shared/output", "shared/results"):
+    for sub in ("shared/input", "shared/processing", "shared/output", "shared/results", "shared/notifications"):
         (base_dir / sub).mkdir(parents=True, exist_ok=True)
 
 
@@ -122,6 +123,7 @@ def run(
 
     validator = TransactionValidator(base_dir=str(base))
     fraud_detector = FraudDetector(base_dir=str(base))
+    notification_agent = NotificationAgent(base_dir=str(base))
     settlement = SettlementProcessor(base_dir=str(base))
 
     transactions = _load_transactions(txn_id_filter)
@@ -146,6 +148,9 @@ def run(
 
         # Stage 2: Fraud Detection
         scored = fraud_detector.process_message(validated)
+
+        # Stage 2b: Notifications (side effect — scored is not modified)
+        notification_agent.process_message(scored)
 
         # Stage 3: Settlement
         result = settlement.process_message(scored)
