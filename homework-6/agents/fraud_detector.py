@@ -29,13 +29,15 @@ from pathlib import Path
 
 logger = logging.getLogger("fraud_detector")
 
-STRUCTURING_LOW = Decimal("9000.00")
-STRUCTURING_HIGH = Decimal("9999.99")
-LARGE_THRESHOLD = Decimal("10000.00")
-VERY_LARGE_THRESHOLD = Decimal("50000.00")
-UNUSUAL_HOUR_START = 0
-UNUSUAL_HOUR_END = 4  # inclusive
 DOMESTIC_COUNTRY: str = "US"  # domestic baseline — override for non-US deployments
+
+
+def _load_rules(base_dir: str) -> dict:
+    path = Path(base_dir) / "config" / "rules.json"
+    if path.exists():
+        with path.open() as f:
+            return json.load(f)
+    return {}
 
 
 def _utcnow() -> str:
@@ -65,6 +67,23 @@ class FraudDetector:
 
     def __init__(self, base_dir: str = ".") -> None:
         self.base_dir = Path(base_dir)
+        cfg = _load_rules(base_dir).get("fraud_detection", {})
+        self.LARGE_THRESHOLD = Decimal(str(cfg.get("high_value_threshold", 10000)))
+        self.VERY_LARGE_THRESHOLD = Decimal(str(cfg.get("very_high_value_threshold", 50000)))
+        self.STRUCTURING_LOW = Decimal(str(cfg.get("structuring_low", 9000)))
+        self.STRUCTURING_HIGH = Decimal(str(cfg.get("structuring_high", 9999.99)))
+        self.UNUSUAL_HOUR_START = cfg.get("unusual_hours_start", 0)
+        self.UNUSUAL_HOUR_END = cfg.get("unusual_hours_end", 4)
+        self.LARGE_SCORE = Decimal(str(cfg.get("large_amount_score", 3.0)))
+        self.VERY_LARGE_SCORE = Decimal(str(cfg.get("very_large_amount_score", 2.0)))
+        self.STRUCTURING_SCORE = Decimal(str(cfg.get("structuring_score", 2.5)))
+        self.UNUSUAL_HOUR_SCORE = Decimal(str(cfg.get("unusual_hour_score", 2.0)))
+        self.CROSS_BORDER_SCORE = Decimal(str(cfg.get("cross_border_score", 1.5)))
+        self.WIRE_SCORE = Decimal(str(cfg.get("wire_transfer_score", 0.5)))
+        self.SCORE_CAP = Decimal(str(cfg.get("score_cap", 10.0)))
+        thresholds = cfg.get("risk_thresholds", {})
+        self.MEDIUM_THRESHOLD = Decimal(str(thresholds.get("medium", 2.0)))
+        self.HIGH_THRESHOLD = Decimal(str(thresholds.get("high", 3.5)))
         self._ensure_dirs()
 
     def _ensure_dirs(self) -> None:
@@ -94,47 +113,47 @@ class FraudDetector:
         factors: list[str] = []
 
         # Rule: large amount
-        if amount > LARGE_THRESHOLD:
-            score += Decimal("3.0")
-            factors.append(f"amount ${amount:,.2f} exceeds $10,000 threshold (+3.0)")
+        if amount > self.LARGE_THRESHOLD:
+            score += self.LARGE_SCORE
+            factors.append(f"amount ${amount:,.2f} exceeds ${self.LARGE_THRESHOLD:,.0f} threshold (+{self.LARGE_SCORE})")
 
         # Rule: very large amount (additional points on top of large)
-        if amount > VERY_LARGE_THRESHOLD:
-            score += Decimal("2.0")
-            factors.append(f"amount ${amount:,.2f} exceeds $50,000 threshold (+2.0)")
+        if amount > self.VERY_LARGE_THRESHOLD:
+            score += self.VERY_LARGE_SCORE
+            factors.append(f"amount ${amount:,.2f} exceeds ${self.VERY_LARGE_THRESHOLD:,.0f} threshold (+{self.VERY_LARGE_SCORE})")
 
         # Rule: structuring signal
-        if STRUCTURING_LOW <= amount <= STRUCTURING_HIGH:
-            score += Decimal("2.5")
+        if self.STRUCTURING_LOW <= amount <= self.STRUCTURING_HIGH:
+            score += self.STRUCTURING_SCORE
             factors.append(
-                f"amount ${amount:,.2f} in structuring range [$9,000–$9,999.99] (+2.5)"
+                f"amount ${amount:,.2f} in structuring range [${self.STRUCTURING_LOW:,.0f}–${self.STRUCTURING_HIGH:,.2f}] (+{self.STRUCTURING_SCORE})"
             )
 
         # Rule: unusual hour
-        if UNUSUAL_HOUR_START <= txn_hour <= UNUSUAL_HOUR_END:
-            score += Decimal("2.0")
+        if self.UNUSUAL_HOUR_START <= txn_hour <= self.UNUSUAL_HOUR_END:
+            score += self.UNUSUAL_HOUR_SCORE
             factors.append(
-                f"transaction at {txn_hour:02d}:xx UTC (unusual hour 00:00–04:59) (+2.0)"
+                f"transaction at {txn_hour:02d}:xx UTC (unusual hour {self.UNUSUAL_HOUR_START:02d}:00–{self.UNUSUAL_HOUR_END:02d}:59) (+{self.UNUSUAL_HOUR_SCORE})"
             )
 
         # Rule: cross-border
         if is_cross_border:
-            score += Decimal("1.5")
-            factors.append(f"cross-border transaction (country: {source_country}) (+1.5)")
+            score += self.CROSS_BORDER_SCORE
+            factors.append(f"cross-border transaction (country: {source_country}) (+{self.CROSS_BORDER_SCORE})")
 
         # Rule: wire transfer type
         if txn_type == "wire_transfer":
-            score += Decimal("0.5")
-            factors.append("transaction type is wire_transfer (+0.5)")
+            score += self.WIRE_SCORE
+            factors.append(f"transaction type is wire_transfer (+{self.WIRE_SCORE})")
 
-        # Cap at 10.0
-        score = min(score, Decimal("10.0"))
+        # Cap at configured maximum
+        score = min(score, self.SCORE_CAP)
         float_score = float(score)
 
         # Calibrated thresholds
-        if score < Decimal("2.0"):
+        if score < self.MEDIUM_THRESHOLD:
             level = "LOW"
-        elif score < Decimal("3.5"):
+        elif score < self.HIGH_THRESHOLD:
             level = "MEDIUM"
         else:
             level = "HIGH"

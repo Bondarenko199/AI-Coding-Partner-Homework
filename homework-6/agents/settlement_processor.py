@@ -28,13 +28,15 @@ from pathlib import Path
 
 logger = logging.getLogger("settlement_processor")
 
-FEE_RATES: dict[str, Decimal] = {
-    "transfer": Decimal("0.0025"),
-    "wire_transfer": Decimal("0.0050"),
-    "payment": Decimal("0.0015"),
-}
-DEFAULT_FEE_RATE = Decimal("0.0025")
 TWO_PLACES = Decimal("0.01")
+
+
+def _load_rules(base_dir: str) -> dict:
+    path = Path(base_dir) / "config" / "rules.json"
+    if path.exists():
+        with path.open() as f:
+            return json.load(f)
+    return {}
 
 DISPOSITION_MAP: dict[str, tuple[str, str]] = {
     "LOW": ("AUTO_SETTLE", "SETTLED"),
@@ -59,6 +61,16 @@ class SettlementProcessor:
 
     def __init__(self, base_dir: str = ".") -> None:
         self.base_dir = Path(base_dir)
+        cfg = _load_rules(base_dir).get("settlement", {})
+        fee_cfg = cfg.get("fee_rates", {})
+        self.FEE_RATES = {k: Decimal(str(v)) for k, v in fee_cfg.items() if k != "default"}
+        if not self.FEE_RATES:
+            self.FEE_RATES = {
+                "transfer": Decimal("0.0025"),
+                "wire_transfer": Decimal("0.0050"),
+                "payment": Decimal("0.0015"),
+            }
+        self.DEFAULT_FEE_RATE = Decimal(str(fee_cfg.get("default", "0.0025")))
         self._ensure_dirs()
 
     def _ensure_dirs(self) -> None:
@@ -69,7 +81,7 @@ class SettlementProcessor:
         """
         Returns (fee_rate, fee_amount, net_amount) as Decimal values.
         """
-        rate = FEE_RATES.get(txn_type, DEFAULT_FEE_RATE)
+        rate = self.FEE_RATES.get(txn_type, self.DEFAULT_FEE_RATE)
         fee = (amount * rate).quantize(TWO_PLACES, rounding=ROUND_HALF_UP)
         net = amount - fee
         return rate, fee, net

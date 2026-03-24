@@ -1,0 +1,45 @@
+{
+  "fraud_detection": {
+    "high_value_threshold": 10000,
+    "very_high_value_threshold": 50000,
+    "structuring_low": 9000,
+    "structuring_high": 9999.99,
+    "unusual_hours_start": 0,
+    "unusual_hours_end": 4,
+    "large_amount_score": 3.0,
+    "very_large_amount_score": 2.0,
+    "structuring_score": 2.5,
+    "unusual_hour_score": 2.0,
+    "cross_border_score": 1.5,
+    "wire_transfer_score": 0.5,
+    "risk_thresholds": {
+      "medium": 2.0,
+      "high": 3.5
+    },
+    "score_cap": 10.0
+  },
+  "compliance": {
+    "blocked_currencies": [
+      "XYZ"
+    ],
+    "aml_reporting_threshold": 10000
+  },
+  "velocity": {
+    "max_transactions_per_hour": 5
+  },
+  "settlement": {
+    "fee_rates": {
+      "transfer": 0.0025,
+      "wire_transfer": 0.005,
+      "payment": 0.0015,
+      "default": 0.0025
+    }
+  },
+  "notifications": {
+    "alert_on_risk_levels": [
+      "HIGH",
+      "MEDIUM"
+    ],
+    "alert_on_rejected": true
+  }
+}
