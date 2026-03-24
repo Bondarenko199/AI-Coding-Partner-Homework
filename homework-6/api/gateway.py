@@ -30,6 +30,7 @@ def submit_transaction(body: dict):
 
     from agents.transaction_validator import TransactionValidator
     from agents.fraud_detector import FraudDetector
+    from agents.notification_agent import NotificationAgent
     from agents.settlement_processor import SettlementProcessor
 
     message = {
@@ -43,11 +44,13 @@ def submit_transaction(body: dict):
 
     validator = TransactionValidator(base_dir=BASE_DIR)
     fraud_detector = FraudDetector(base_dir=BASE_DIR)
+    notification_agent = NotificationAgent(base_dir=BASE_DIR)
     settlement = SettlementProcessor(base_dir=BASE_DIR)
 
     validated = validator.process_message(message)
     if validated["data"].get("validation_status") != "REJECTED":
         scored = fraud_detector.process_message(validated)
+        notification_agent.process_message(scored)
         settlement.process_message(scored)
 
     return {"tracking_id": body["transaction_id"], "status": "accepted"}

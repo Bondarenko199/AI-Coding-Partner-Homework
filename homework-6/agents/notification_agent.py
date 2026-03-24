@@ -55,9 +55,20 @@ class NotificationAgent:
         """
         Evaluate a fraud-assessed message and fire an alert if warranted.
 
+        Follows the file-based protocol: reads from shared/output/{message_id}.json
+        if the file exists (consistent with FraudDetector and SettlementProcessor).
         Returns the alert dict if an alert was triggered, or {"alerted": false}.
         """
+        in_message_id = message.get("message_id", "")
         data = message.get("data", {})
+
+        # File-based fallback: read from shared/output/ if written by fraud_detector
+        out_path = self.base_dir / "shared" / "output" / f"{in_message_id}.json"
+        if out_path.exists():
+            with out_path.open() as f:
+                loaded = json.load(f)
+            data = loaded.get("data", data)
+
         transaction_id = data.get("transaction_id", "UNKNOWN")
         risk_level = data.get("risk_level", "")
         validation_status = data.get("validation_status", "")

@@ -130,5 +130,15 @@ print()
 print(f'Summary: {approved} approved, {held} held, {pending} pending review, {rejected} rejected')
 "
 
+ALERT_COUNT=$(ls "${BASE_DIR}/shared/notifications/"*_alert.json 2>/dev/null | wc -l | tr -d ' ')
+if [ "${ALERT_COUNT}" -gt 0 ]; then
+    echo "Notifications fired: ${ALERT_COUNT} alert(s) written to shared/notifications/"
+    ls "${BASE_DIR}/shared/notifications/"*_alert.json 2>/dev/null | while read -r f; do
+        txn=$(python3 -c "import json; d=json.load(open('${f}')); print(d['data']['transaction_id'], d['data']['alert_type'])" 2>/dev/null)
+        echo "  → ${txn}"
+    done
+else
+    echo "No notifications triggered."
+fi
 echo ""
 echo "=== Demo Complete ==="
