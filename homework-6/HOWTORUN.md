@@ -122,6 +122,94 @@ With Claude Code running in this directory:
 
 ---
 
+## REST API Gateway
+
+The API gateway exposes the pipeline over HTTP using FastAPI.
+
+### Start the server
+
+```bash
+.venv/bin/uvicorn api.gateway:app --host 0.0.0.0 --port 5000
+```
+
+Interactive docs are available at `http://localhost:5000/docs` once the server is running.
+
+### Endpoints
+
+#### `POST /api/transactions` — Submit a transaction
+
+Required fields: `transaction_id`, `amount`, `currency`, `transaction_type`, `source_account`, `destination_account`.
+
+```bash
+curl -X POST http://localhost:5000/api/transactions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "transaction_id": "TXN-001",
+    "amount": "1500.00",
+    "currency": "USD",
+    "transaction_type": "transfer",
+    "source_account": "ACC-001",
+    "destination_account": "ACC-002",
+    "timestamp": "2026-03-24T10:00:00Z",
+    "metadata": {"channel": "online", "country": "US"}
+  }'
+```
+
+Response `201`:
+```json
+{"tracking_id": "TXN-001", "status": "accepted"}
+```
+
+Missing field → `400`:
+```json
+{"detail": {"error": "missing required field: currency", "field": "currency"}}
+```
+
+#### `GET /api/transactions/{transaction_id}/status` — Check status
+
+```bash
+curl http://localhost:5000/api/transactions/TXN-001/status
+```
+
+Response `200`:
+```json
+{
+  "transaction_id": "TXN-001",
+  "status": "settled",
+  "details": {
+    "risk_level": "LOW",
+    "settlement_status": "SETTLED",
+    "fee_amount": "3.75",
+    "net_amount": "1496.25"
+  }
+}
+```
+
+Not found → `404`:
+```json
+{"detail": {"error": "Transaction not found", "transaction_id": "TXN-001"}}
+```
+
+Possible `status` values: `settled`, `held`, `pending_review`, `rejected`.
+
+#### `GET /api/results` — List all processed transactions
+
+```bash
+curl http://localhost:5000/api/results
+```
+
+Returns a JSON array of result data objects from `shared/results/`.
+
+### Automated end-to-end demo
+
+```bash
+bash demo.sh
+```
+
+Starts the server, submits 3 test transactions, and prints a summary. Requires the server to not already be running on port 5000.
+
+---
+
 ## MCP Server
 
 1. Start the pipeline status MCP server:

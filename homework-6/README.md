@@ -124,12 +124,32 @@ The custom FastMCP server (`mcp/server.py`) exposes:
 
 ---
 
+## REST API Gateway
+
+The pipeline is also accessible over HTTP via a FastAPI gateway (`api/gateway.py`).
+
+```bash
+.venv/bin/uvicorn api.gateway:app --host 0.0.0.0 --port 5000
+```
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/transactions` | POST | Submit a transaction; runs full pipeline inline |
+| `/api/transactions/{id}/status` | GET | Check status of a processed transaction |
+| `/api/results` | GET | List all processed transactions |
+| `/docs` | GET | Interactive Swagger UI |
+
+See [HOWTORUN.md](HOWTORUN.md) for full curl examples and request/response formats.
+
+---
+
 ## Tech Stack
 
 | Component | Technology |
 |-----------|-----------|
 | Language | Python 3.11+ |
 | Monetary arithmetic | `decimal.Decimal` (stdlib) |
+| REST API | `fastapi` >= 0.110.0, `uvicorn` >= 0.27.0 |
 | MCP server | `fastmcp` >= 2.0.0 |
 | Testing | `pytest` >= 8.0.0 |
 | Coverage | `pytest-cov` >= 5.0.0 |
