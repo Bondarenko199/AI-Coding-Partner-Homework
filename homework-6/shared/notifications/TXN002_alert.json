@@ -1,0 +1,19 @@
+{
+  "message_id": "e55c2ff4-3bcd-45f8-98ef-aa37ef458e40",
+  "timestamp": "2026-03-24T08:53:56Z",
+  "source_agent": "notification_agent",
+  "target_agent": "audit_log",
+  "message_type": "alert",
+  "data": {
+    "transaction_id": "TXN002",
+    "alert_type": "HIGH_RISK_FLAGGED",
+    "risk_level": "HIGH",
+    "risk_score": 5.5,
+    "risk_factors": [
+      "amount exceeds 10000"
+    ],
+    "amount": "25000.00",
+    "currency": "USD",
+    "alerted_at": "2026-03-24T08:53:56Z"
+  }
+}
