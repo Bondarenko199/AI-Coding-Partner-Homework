@@ -1,0 +1,8 @@
+<tickets>
+  <ticket customer_id="" customer_email="bad-email" customer_name="" subject="S" description="Too short" status="open">
+    <metadata source="web" device_type="desktop" />
+  </ticket>
+  <ticket customer_id="CUST_BAD" customer_email="bad2@example.com" customer_name="Bad Enum" subject="Bad enums" description="Description long enough" category="unknown" priority="super" status="pending">
+    <metadata source="sms" device_type="other" />
+  </ticket>
+</tickets>

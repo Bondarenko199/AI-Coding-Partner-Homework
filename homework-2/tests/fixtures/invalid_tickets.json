@@ -1,0 +1,16 @@
+[
+  {
+    "customer_id": "CUST801",
+    "customer_email": "not-an-email",
+    "customer_name": "Test User",
+    "subject": "Test",
+    "description": "Too short"
+  },
+  {
+    "customer_id": "",
+    "customer_email": "valid@example.com",
+    "customer_name": "Another User",
+    "subject": "Missing customer ID",
+    "description": "This should fail validation"
+  }
+]

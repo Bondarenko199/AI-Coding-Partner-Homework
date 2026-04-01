@@ -1,0 +1,4 @@
+customer_id,customer_email,customer_name,subject,description,category,priority,status,source,device_type
+,,No Email,Short,Too short,billing_question,urgent,new,web_form,desktop
+CUST_BAD,bad-email,No Name,,Valid desc but no subject,technical_issue,high,new,api,desktop
+CUST_DUP,cust@example.com,Duplicate ID,Valid subject,Valid description that is long enough,unknown_category,low,new,phone,tablet

@@ -1,0 +1,30 @@
+[
+  {
+    "customer_id": "",
+    "customer_email": "not-an-email",
+    "customer_name": "",
+    "subject": "Bad",
+    "description": "Too short",
+    "status": "open",
+    "source": "web_form",
+    "device_type": "desktop"
+  },
+  {
+    "customer_id": "CUST_MISS_META",
+    "customer_email": "ok@example.com",
+    "customer_name": "No Metadata",
+    "subject": "Missing metadata",
+    "description": "Valid length description but missing metadata object"
+  },
+  {
+    "customer_id": "CUST_BAD_ENUM",
+    "customer_email": "badenum@example.com",
+    "customer_name": "Bad Enum",
+    "subject": "Bad enums",
+    "description": "Valid description but enums are wrong",
+    "category": "not_allowed",
+    "priority": "super_high",
+    "status": "pending",
+    "metadata": { "source": "sms", "device_type": "fridge" }
+  }
+]
